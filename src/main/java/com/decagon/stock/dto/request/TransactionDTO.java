@@ -1,4 +1,4 @@
-package com.decagon.stock.dto;
+package com.decagon.stock.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

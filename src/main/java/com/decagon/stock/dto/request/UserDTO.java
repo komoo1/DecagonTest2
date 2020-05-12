@@ -1,9 +1,10 @@
-package com.decagon.stock.dto;
+package com.decagon.stock.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -13,6 +14,8 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 public class UserDTO implements Serializable {
+    @NotNull
     private String username;
+    @NotNull
     private String password;
 }

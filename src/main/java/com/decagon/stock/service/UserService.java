@@ -15,4 +15,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public boolean isUsernameExist(String username){
+
+        return true;
+    }
+
+    public boolean registerUser(String username, String password){
+
+        return true;
+    }
+
+    public boolean loginUser(String username, String password){
+
+        return true;
+    }
 }

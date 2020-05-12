@@ -1,6 +1,6 @@
 package com.decagon.stock.rest;
 
-import com.decagon.stock.dto.StockDTO;
+import com.decagon.stock.dto.request.StockDTO;
 import com.decagon.stock.service.StockService;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
