@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
  * @author Victor.Komolafe
  */
 @Repository
-public class UserRepositoryTest {
+public class TransactionRepositoryIntegrationTest {
 }

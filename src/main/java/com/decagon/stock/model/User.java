@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @Entity
 @Getter
 @Setter
-public class User {
+public class User extends _Base {
 
     @Column(unique = true)
     private String username;

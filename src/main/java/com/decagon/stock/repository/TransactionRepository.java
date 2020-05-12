@@ -4,6 +4,7 @@ import com.decagon.stock.model.Transaction;
 import com.decagon.stock.model.User;
 import com.decagon.stock.repository.data.TransactionData;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,7 +19,7 @@ import java.util.UUID;
  * @author Victor.Komolafe
  */
 @Repository
-public interface TransactionRepository extends _BaseRepository<Transaction, Long>, TransactionCustomRepository {
+public interface TransactionRepository extends JpaRepository<Transaction, Long>, TransactionCustomRepository {
 
     Optional<TransactionData> findFirstByUuid(UUID uuid);
 

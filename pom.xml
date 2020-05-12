@@ -96,7 +96,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <!-- surefire plugin version managed by Spring Boot -->
                 <configuration>
-                    <skipTests>true</skipTests>
+                    <skipTests>false</skipTests>
                 </configuration>
                 <executions>
                     <execution>
@@ -108,7 +108,7 @@
                         <configuration>
                             <skipTests>false</skipTests>
                             <includes>
-                                <include>src/main/test/unit/*.java</include>
+                                <include>src/test/java/unit/**/*.java</include>
                             </includes>
                         </configuration>
                     </execution>
@@ -121,7 +121,7 @@
                         <configuration>
                             <skipTests>false</skipTests>
                             <includes>
-                                <include>src/main/test/integration/*.java</include>
+                                <include>src/test/java/integration/**/*.java</include>
                             </includes>
                         </configuration>
                     </execution>

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Controller;
  * @author Victor.Komolafe
  */
 @Controller
-public class TransactionControllerTest {
+public class TransactionControllerIntegrationTest {
 }

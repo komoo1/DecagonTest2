@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
  * @author Victor.Komolafe
  */
 @Service
-public class MarketService {
+public class TransactionServiceIntegrationTest {
 }
