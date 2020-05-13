@@ -1,0 +1,202 @@
+{
+	"info": {
+		"_postman_id": "d3c09b43-b317-46e7-9025-b16b507f9e59",
+		"name": "DecagonTest2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UserC",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"user1\",\n\t\"password\":\"pass1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:9888/api/user/register"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "afc2dcc1-b2ab-4f92-9fe0-9bee43f146c9",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"TOKEN\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"user1\",\n\t\"password\":\"pass1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:9888/api/user/login"
+					},
+					"response": []
+				},
+				{
+					"name": "UsenameExists",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:9888/api/user/exists/user1"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "StockC",
+			"item": [
+				{
+					"name": "Buy Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authToken",
+								"value": "e34de1cb-8a02-4dcf-ab1b-89ef3d07058d",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"symbol\":\"NFLX\",\n\t\"amount\":\"2001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:9888/api/stock/buy"
+					},
+					"response": []
+				},
+				{
+					"name": "Price Look up",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authToken",
+								"value": "{{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9888/api/stock/pricelookup?symbol=NFLX",
+							"host": [
+								"localhost"
+							],
+							"port": "9888",
+							"path": [
+								"api",
+								"stock",
+								"pricelookup"
+							],
+							"query": [
+								{
+									"key": "symbol",
+									"value": "NFLX"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authToken",
+								"value": "{{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"symbol\":\"NFLX\",\n\t\"amount\":\"200\",\n\t\"transactionUuid\":\"52289d6a-0536-4de9-9e3c-1e990d376d26\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:9888/api/stock/sell"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Search Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authToken",
+								"value": "{{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"startDate\":\"2020-05-12 23:00:00\",\n\t\"endDate\":\"2020-05-20 23:57:00\",\n\t\"pageSize\":10,\n\t\"pageNumber\":0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:9888/api/transaction/search"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

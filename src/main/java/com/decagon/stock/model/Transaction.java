@@ -1,5 +1,6 @@
 package com.decagon.stock.model;
 
+import com.decagon.stock.repository.data.TransactionData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,10 +25,10 @@ public class Transaction extends _Base {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    @Column(updatable = false)
+    @Column
     private BigDecimal amount;
 
-    @Column(name = "open_price")
+    @Column(name = "open_price", updatable = false)
     private Double openPrice;
 
     @Column(name = "close_price")
@@ -37,13 +38,13 @@ public class Transaction extends _Base {
     private boolean active;
 
     @Column
-    private UUID uuid;
+    private UUID uuid = UUID.randomUUID();
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, updatable = false)
     private Stock stock;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, updatable = false)
     private User user;
 }

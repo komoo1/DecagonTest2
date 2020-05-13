@@ -1,11 +1,15 @@
 package com.decagon.stock;
 
+import com.decagon.stock.security.SecurityInterceptor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.concurrent.Executor;
 
@@ -15,7 +19,11 @@ import java.util.concurrent.Executor;
 @EnableWebMvc
 @EnableAsync
 @SpringBootApplication
-public class StockApplication {
+@RequiredArgsConstructor
+public class StockApplication implements WebMvcConfigurer {
+
+    private final SecurityInterceptor securityInterceptor;
+
     public static void main(String[] args) {
         SpringApplication.run(StockApplication.class, args);
     }
@@ -36,4 +44,8 @@ public class StockApplication {
         return executor;
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(securityInterceptor).addPathPatterns("/**");
+    }
 }

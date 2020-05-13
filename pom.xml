@@ -14,7 +14,7 @@
     <artifactId>decagon-test-two</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>decagon-test-two</name>
+    <name>stockapp</name>
     <description>Demo Java application for trading stocks</description>
 
     <properties>
@@ -22,6 +22,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
     </properties>
 
     <dependencyManagement>
@@ -61,6 +62,15 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>pl.zankowski</groupId>
+            <artifactId>iextrading4j-all</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
@@ -82,7 +92,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -96,7 +106,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <!-- surefire plugin version managed by Spring Boot -->
                 <configuration>
-                    <skipTests>false</skipTests>
+                    <skipTests>true</skipTests>
                 </configuration>
                 <executions>
                     <execution>
@@ -108,46 +118,8 @@
                         <configuration>
                             <skipTests>false</skipTests>
                             <includes>
-                                <include>src/test/java/unit/**/*.java</include>
+                                <include>src/test/java/**/*.java</include>
                             </includes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>integration-tests</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <skipTests>false</skipTests>
-                            <includes>
-                                <include>src/test/java/integration/**/*.java</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources</directory>
-                                    <excludes>
-                                        <exclude>*.properties</exclude>
-                                        <exclude>*.yml</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
                         </configuration>
                     </execution>
                 </executions>

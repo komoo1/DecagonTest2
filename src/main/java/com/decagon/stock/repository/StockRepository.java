@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
     /**
-     * Retrieve a stock by name
-     * @param name
+     * Retrieve a stock by symbol
+     * @param symbol
      * @return
      */
-    Optional<Stock> findFirstByNameIgnoreCase(String name);
+    Optional<Stock> findFirstBySymbolIgnoreCase(String symbol);
 }

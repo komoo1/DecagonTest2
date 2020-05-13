@@ -3,6 +3,8 @@ package com.decagon.stock.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -11,9 +13,12 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class TransactionDTO implements Serializable {
+    @NotBlank
+    @NotNull
     private String startDate;
+    @NotBlank
+    @NotNull
     private String endDate;
-    private Integer pageSize;
-    private Integer pageOffset;
-    private Integer pageNumber;
+    private int pageSize = 10;
+    private int pageNumber = 0;
 }

@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -14,8 +17,11 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 public class StockDTO implements Serializable {
-    private String stockName;
+    @NotNull
+    @NotBlank
+    private String symbol;
+    @NotNull
+    @Min(value = 0)
     private BigDecimal amount;
-    private Double price;
-    private Double slippage;
+    private String transactionUuid;
 }

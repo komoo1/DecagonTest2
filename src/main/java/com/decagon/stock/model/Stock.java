@@ -16,5 +16,5 @@ import javax.persistence.Entity;
 public class Stock extends _Base {
 
     @Column(unique = true)
-    private String name;
+    private String symbol;
 }
