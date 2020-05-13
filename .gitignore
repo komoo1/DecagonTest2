@@ -11,8 +11,10 @@
 *.tar.gz
 *.rar
 hs_err_pid*
+logs/
 *.class
 *.log
+*.gz
 *.ctxt
 .mtj.tmp/
 *.jar
