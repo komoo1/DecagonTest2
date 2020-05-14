@@ -23,7 +23,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
-    private final AuthDetailFactory authDetailFactory;
     private final AuthDetailProvider authDetailProvider;
 
     @Override
@@ -48,9 +47,6 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         if(authDetail==null){
             throw new IllegalAccessException("Invalid authentication token");
         }
-
-       // AuthDetailFactory.setAuthDetail(authDetail);
-       authDetailFactory.setAuthDetail(authDetail);
 
         return super.preHandle(request, response, handler);
     }

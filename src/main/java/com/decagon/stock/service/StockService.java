@@ -9,14 +9,8 @@ import com.decagon.stock.repository.StockRepository;
 import com.decagon.stock.repository.data.TransactionData;
 import com.decagon.stock.service.iex.IEXService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.zankowski.iextrading4j.client.IEXCloudClient;
-import pl.zankowski.iextrading4j.client.IEXCloudTokenBuilder;
-import pl.zankowski.iextrading4j.client.IEXTradingApiVersion;
-import pl.zankowski.iextrading4j.client.IEXTradingClient;
-import pl.zankowski.iextrading4j.client.rest.request.stocks.PriceRequestBuilder;
 
 import java.math.BigDecimal;
 import java.util.Optional;

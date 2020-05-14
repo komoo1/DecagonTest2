@@ -4,7 +4,9 @@ import com.decagon.stock.dto.request.TransactionDTO;
 import com.decagon.stock.dto.response.ResponseData;
 import com.decagon.stock.dto.response.TransactionResponse;
 import com.decagon.stock.repository.data.TransactionSearchData;
-import com.decagon.stock.security.AuthDetailFactory;
+import com.decagon.stock.security.AuthDetail;
+import com.decagon.stock.security.AuthDetailProvider;
+import com.decagon.stock.security.SecurityInterceptor;
 import com.decagon.stock.service.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -26,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +41,8 @@ public class TransactionControllerTest {
 
     private MockMvc mockMvc;
     private TransactionService transactionService = Mockito.mock(TransactionService.class);
-    private AuthDetailFactory authDetailFactory = Mockito.mock(AuthDetailFactory.class);
+    private AuthDetailProvider authDetailProvider = Mockito.mock(AuthDetailProvider.class);
+
     private TransactionController transactionController;
     private final ObjectMapper mapper = new ObjectMapper();
     private final UUID userUuid = UUID.randomUUID();
@@ -46,9 +50,10 @@ public class TransactionControllerTest {
     @Before
     public void init(){
         MockitoAnnotations.initMocks(this);
-        transactionController = new TransactionController(transactionService, authDetailFactory);
+        transactionController = new TransactionController(transactionService, authDetailProvider);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(transactionController)
+                .addInterceptors(new SecurityInterceptor(authDetailProvider))
                 .build();
     }
 
@@ -68,11 +73,15 @@ public class TransactionControllerTest {
         TransactionResponse response = new TransactionResponse(dataList);
         response.setCode(ResponseData.SUCCESS); response.setDescription(ResponseData.SUCCESS_MESSAGE);
 
+        String tokenUuid = UUID.randomUUID().toString();
+        AuthDetail authDetail = new AuthDetail(userUuid.toString());
+
+        when(authDetailProvider.getAuthDetail(anyString())).thenReturn(authDetail);
         when(transactionService.searchUserTransactions(dto, userUuid.toString()))
                 .thenReturn(response);
 
-         mockMvc.perform(post("/transaction/search")
-                .header("authToken", "")
+        mockMvc.perform(post("/transaction/search")
+                .header("authToken", tokenUuid)
                 .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(dto)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
