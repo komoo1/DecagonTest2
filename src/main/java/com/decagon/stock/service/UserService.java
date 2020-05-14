@@ -67,7 +67,7 @@ public class UserService {
             throw new IllegalAccessException(ResponseData.USER_VALIDATION_ERROR_MESSAGE);
         }
 
-        String token = UUID.randomUUID().toString();  // TODO tokenize user basic data
+        String token = UUID.randomUUID().toString();  // TODO  jwt tokenize user basic data
         authProvider.setAuthDetail(token, new AuthDetail(user.getUuid().toString()));
 
         LoginResponse response = new LoginResponse(token);

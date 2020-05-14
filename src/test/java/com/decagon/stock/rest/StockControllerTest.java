@@ -4,8 +4,8 @@ import com.decagon.stock.dto.request.StockDTO;
 import com.decagon.stock.dto.response.ApiResponse;
 import com.decagon.stock.dto.response.ResponseData;
 import com.decagon.stock.security.AuthDetail;
-import com.decagon.stock.security.AuthDetailFactory;
-import com.decagon.stock.security.AuthDetailFactoryHelper;
+import com.decagon.stock.security.AuthDetailProvider;
+import com.decagon.stock.security.SecurityInterceptor;
 import com.decagon.stock.service.StockService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -16,12 +16,14 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,8 +39,7 @@ public class StockControllerTest {
     private MockMvc mockMvc;
 
     private StockService stockService = Mockito.mock(StockService.class);
-    private AuthDetailFactory authDetailFactory = Mockito.mock(AuthDetailFactory.class);
-    private AuthDetailFactoryHelper authDetailFactoryHelper;
+    private AuthDetailProvider authDetailProvider = Mockito.mock(AuthDetailProvider.class);
 
     private StockController stockController;
     private final ObjectMapper mapper = new ObjectMapper();
@@ -47,11 +48,11 @@ public class StockControllerTest {
     @Before
     public void init(){
         MockitoAnnotations.initMocks(this);
-        stockController = new StockController(stockService, authDetailFactory);
-        authDetailFactoryHelper = new AuthDetailFactoryHelper(authDetailFactory);
+        stockController = new StockController(stockService, authDetailProvider);
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(stockController)
+                .addInterceptors(new SecurityInterceptor(authDetailProvider))
                 .build();
     }
 
@@ -62,12 +63,15 @@ public class StockControllerTest {
         dto.setAmount(BigDecimal.TEN);
         ApiResponse response = new ApiResponse(ResponseData.SUCCESS, ResponseData.SUCCESS_MESSAGE);
 
-        when(new AuthDetailFactoryHelper(authDetailFactory).getAuthDetail()).thenReturn(new AuthDetail(UUID.randomUUID().toString()));
+        String tokenUuid = UUID.randomUUID().toString();
+        AuthDetail authDetail = new AuthDetail(userUuid.toString());
+
+        when(authDetailProvider.getAuthDetail(anyString())).thenReturn(authDetail);
         when(stockService.buyStock(dto.getSymbol(), dto.getAmount(), userUuid.toString()))
                 .thenReturn(response);
 
         mockMvc.perform(post("/stock/buy")
-                .header("authToken", "234353")
+                .header("authToken", tokenUuid)
                 .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(dto)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -82,11 +86,15 @@ public class StockControllerTest {
         dto.setTransactionUuid(UUID.randomUUID().toString());
         ApiResponse response = new ApiResponse(ResponseData.SUCCESS, ResponseData.SUCCESS_MESSAGE);
 
+        String tokenUuid = UUID.randomUUID().toString();
+        AuthDetail authDetail = new AuthDetail(userUuid.toString());
+
+        when(authDetailProvider.getAuthDetail(anyString())).thenReturn(authDetail);
         when(stockService.sellStock(dto.getSymbol(), dto.getTransactionUuid(),dto.getAmount(), userUuid.toString()))
                 .thenReturn(response);
 
-         mockMvc.perform(post("/stock/sell")
-                .header("authToken", "")
+        mockMvc.perform(post("/stock/sell")
+                .header("authToken", tokenUuid)
                 .contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(dto)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -100,11 +108,12 @@ public class StockControllerTest {
         when(stockService.lookupStockPrice(anyString()))
                 .thenReturn(response);
 
-       mockMvc.perform(get("/stock/pricelookup?symbol=NFLX")
+        MvcResult mvcResult = mockMvc.perform(get("/stock/pricelookup?symbol=NFLX")
                 .header("authToken", ""))
                 .andExpect(status().isOk())
                 .andReturn();
 
+        assertThat((ApiResponse)mvcResult.getAsyncResult()).extracting(ApiResponse::getCode).isEqualTo(ResponseData.SUCCESS);
 
     }
 }

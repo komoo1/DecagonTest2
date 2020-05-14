@@ -1,8 +1,8 @@
 package com.decagon.stock.model;
 
-import com.decagon.stock.repository.data.TransactionData;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,10 +41,10 @@ public class Transaction extends _Base {
     private UUID uuid = UUID.randomUUID();
 
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name="stock_id", nullable = false, updatable = false)
     private Stock stock;
 
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name="user_id", nullable = false, updatable = false)
     private User user;
 }
